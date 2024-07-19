@@ -1,5 +1,9 @@
 # coding: utf-8
 
-import sqlite3
+import json
+import os
 
-db = sqlite3.connect('data.db')
+# 检测是否存在
+
+if not (os.path.exists('data/config.json')):
+    pass
