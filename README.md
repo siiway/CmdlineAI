@@ -2,6 +2,12 @@
 
 一个简单的命令行 AI 客户端
 
+### 要求
+
+Python: `3.10`+
+
+Requirements: [Here](./requirements.txt)
+
 ### 功能 / 支持
 
 目前的功能:

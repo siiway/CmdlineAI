@@ -3,14 +3,18 @@
 
 from libs.getchar import getChar as getchar
 from utils import utils as utils_init
-from config import config as config_init
-from chat import chat as chat_init
 u = utils_init()
+from config import config as config_init
 config = config_init()
-chat = chat_init()
-
+from chat import chat as chat_init
+# 后面: chat = chat_init(name)
+from chatting import chatting as chatting_init
+# 后面: chatting = chatting_init(...)
 
 def Main():
+    '''
+    主程序
+    '''
     u.info('''---
 Welcome to CmdlineAI v1!
 Copyright (c)2024 wyf9. All rights reserved.
@@ -49,11 +53,16 @@ s -> Settings
                     u.warning('Received ^C/^Z, quitting.')
                     exit(1)
                 case _:
-                    pass
+                    continue
+            break
 
 def Settings():
+    '''
+    设置界面
+    '''
     u.warning('[Choose] Load configs? (y/...)')
-    choose = input('> ')
+    choose = getchar()
+    u.debug(f'getChar choose: {repr(choose)}')
     if not (choose == 'y' or choose == 'Y'):
         return 0
     u.info('Config now:')
@@ -62,7 +71,7 @@ def Settings():
         print(f"'{name}': '{value}'")
     while True:
         print('[Tip] r -> return')
-        inp = input('[Select] edit: ')
+        inp = input('[Input] edit: ')
         if inp == 'r' or inp == 'R':
             break
         else:
@@ -77,9 +86,73 @@ def Settings():
                 u.info(f"{repr(inp)} set to {repr(config.cget(inp))}")
 
 def NewChat():
-    pass
+    '''
+    创建新会话
+    '''
+    print('[Tip] c -> cancel')
+    chat_name = input('[Input] Chat name: ')
+    if chat_name == 'c' or chat_name == 'C':
+        return 0
+    else:
+        u.info(f'Start chat: {repr(chat_name)}')
+        config.load()
+        chat = chat_init(repr(chat_name))
+        chatting = chatting_init(
+            api_base_url = config.cfg['api_base_url'],
+            account_id = config.cfg['account_id'],
+            api_token = config.cfg['api_token'],
+            model = config.cfg['model'],
+        )
+        conversation = [  # init chat list
+            {"role": "system", "content": config.cfg['prompt']},
+        ]
+        print('''[Tip]
+- /s -> Send
+- /q -> Quit the chat''')
+        while True:
+            all_msg = ''
+            print('[Input]')
+            while True:
+                msgn = input(config.cfg['prompt-when-input'])
+                match msgn:
+                    case '/s': # send
+                        break
+                    case '/q': # quit
+                        u.info('Quitting chat')
+                        return 0
+                    case _: # default: add msg
+                        all_msg += f'{msgn}\n'
+            conversation += [{"role": "user", "content": all_msg},]
+            u.debug(f'all_msg: {all_msg}')
+            u.info('Querying')
+            output = chatting.run(conversation)
+            u.debug(f'output: {output}')
+            if output['success']:
+                print(f'''[Response]
+-```
+{output['result']['response']}
+```-''')
+                conversation += [{"role": "assistant", "content": output['result']['response']}]
+                chat.save(conversation)
+            else:
+                u.error(f'''Error!
+All Response:
+{u.format_dict(output)}''')
+                conversation.pop() # its a list!!!
+                u.debug('Pop last user input')
+                continue
 
 def ChatList():
+    '''
+    会话列表
+    '''
+    pass
+
+def OpenChat():
+    '''
+    打开会话
+    will move from NewChat()
+    '''
     pass
 
 if __name__ == "__main__":

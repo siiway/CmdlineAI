@@ -8,12 +8,6 @@ import utils as u
 class chat:
     def __init__(self, name):
         self.name = name
-    #     with open('data/config.json', 'r') as file:
-    #         self.cfg = json.load(file)
-
-    # def create(self):
-    #     with open(f'data/chat/{self.name}.json', 'r') as file:
-    #         self.cfg = json.load(file)
 
     def load(self):
         with open(f'data/chat/{self.name}.json', 'r') as file:

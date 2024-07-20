@@ -1,4 +1,6 @@
+import json
 from colorama import Fore, Style
+
 class utils:
     env_debug = False
     def info(self, msg):
@@ -10,3 +12,5 @@ class utils:
     def debug(self, msg):
         if self.env_debug:
             print(f'{Fore.BLUE}[D]{Style.RESET_ALL} {msg}')
+    def format_dict(self, dic):
+        return json.dumps(dic, indent=4, ensure_ascii=False, sort_keys=False,separators=(', ', ': '))
