@@ -19,7 +19,7 @@ def initJson():
         }
 
         with open('data/config.json', 'w+') as file:
-            json.dump(jsonData, file, indent=4)
+            json.dump(jsonData, file, indent=4, ensure_ascii=False)
     except:
         u.error('Create config.json failed')
         raise
@@ -38,11 +38,11 @@ class config:
             self.cfg = json.load(file)
     def save(self):
         with open('data/config.json', 'w+') as file:
-            json.dump(self.cfg, file, indent=4)
+            json.dump(self.cfg, file, indent=4, ensure_ascii=False)
     def cset(self, name, value):
         self.cfg[name] = value
         with open('data/config.json', 'w+') as file:
-            json.dump(self.cfg, file, indent=4)
+            json.dump(self.cfg, file, indent=4, ensure_ascii=False)
     def cget(self, name):
         with open('data/config.json', 'r') as file:
             self.cfg = json.load(file)

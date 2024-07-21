@@ -15,4 +15,4 @@ class chat:
 
     def save(self, value):
         with open(f'data/chat/{self.name}.json', 'w+') as file:
-            json.dump(value, file, indent=4)
+            json.dump(value, file, indent=4, ensure_ascii=False)
