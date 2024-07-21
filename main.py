@@ -95,52 +95,10 @@ def NewChat():
         return 0
     else:
         u.info(f'Start chat: {repr(chat_name)}')
-        config.load()
-        chat = chat_init(chat_name)
-        chatting = chatting_init(
-            api_base_url = config.cfg['api_base_url'],
-            account_id = config.cfg['account_id'],
-            api_token = config.cfg['api_token'],
-            model = config.cfg['model'],
-        )
         conversation = [  # init chat list
             {"role": "system", "content": config.cfg['prompt']},
         ]
-        print('''[Tip]
-- /s -> Send
-- /q -> Quit the chat''')
-        while True:
-            all_msg = ''
-            print('[Input]')
-            while True:
-                msgn = input(config.cfg['prompt-when-input'])
-                match msgn:
-                    case '/s': # send
-                        break
-                    case '/q': # quit
-                        u.info('Quitting chat')
-                        return 0
-                    case _: # default: add msg
-                        all_msg += f'{msgn}\n'
-            conversation += [{"role": "user", "content": all_msg},]
-            u.debug(f'all_msg: {repr(all_msg)}')
-            u.info('Querying')
-            output = chatting.run(conversation)
-            u.debug(f'output: {output}')
-            if output['success']:
-                print(f'''[Response]
--```
-{output['result']['response']}
-```-''')
-                conversation += [{"role": "assistant", "content": output['result']['response']}]
-                chat.save(conversation)
-            else:
-                u.error(f'''Error!
-All Response:
-{u.format_dict(output)}''')
-                conversation.pop() # its a list!!!
-                u.debug('Pop last user input')
-                continue
+        OpenChat(chat_name, conversation)
 
 def ChatList():
     '''
@@ -148,12 +106,56 @@ def ChatList():
     '''
     pass
 
-def OpenChat():
+def OpenChat(chat_name, conversation):
     '''
     打开会话
-    will move from NewChat()
+    @param chat_name: 用于存储的会话名称
+    @param conversation: 对话体
+    moving from NewChat()
     '''
-    pass
+    config.load()
+    chat = chat_init(chat_name)
+    chatting = chatting_init(
+        api_base_url = config.cfg['api_base_url'],
+        account_id = config.cfg['account_id'],
+        api_token = config.cfg['api_token'],
+        model = config.cfg['model'],
+    )
+    print('''[Tip]
+- /s -> Send
+- /q -> Quit the chat''')
+    while True:
+        all_msg = ''
+        print('[Input]')
+        while True:
+            msgn = input(config.cfg['prompt-when-input'])
+            match msgn:
+                case '/s': # send
+                    break
+                case '/q': # quit
+                    u.info('Quitting chat')
+                    return 0
+                case _: # default: add msg
+                    all_msg += f'{msgn}\n'
+        conversation += [{"role": "user", "content": all_msg},]
+        u.debug(f'all_msg: {repr(all_msg)}')
+        u.info('Querying')
+        output = chatting.run(conversation)
+        u.debug(f'output: {output}')
+        if output['success']:
+            print(f'''[Response]
+-```
+{output['result']['response']}
+```-''')
+            conversation += [{"role": "assistant", "content": output['result']['response']}]
+            chat.save(conversation)
+        else:
+            u.error(f'''Error!
+All Response:
+{u.format_dict(output)}''')
+            conversation.pop() # its a list!!!
+            u.debug('Pop last user input')
+            continue
 
 if __name__ == "__main__":
     Main()

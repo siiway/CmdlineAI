@@ -13,7 +13,8 @@ Requirements: [Here](./requirements.txt)
 目前的功能:
 
 - [x] 简单对话
-- [ ] 会话保存
+- [x] 配置存储
+- [x] 会话保存/恢复
 - [ ] 数据同步
 - [ ] 流式输出
 
@@ -23,17 +24,12 @@ Requirements: [Here](./requirements.txt)
 - [ ] OpenAI
 - [ ] Others
 
-### 开发配置
+### TODO
 
-开发环境的配置和发布隔离, 需手动创建 `config.dev.json` 并写入以下内容:
-
-```json
-{
-    "init": true
-}
-```
-
-来初始化配置
+- [ ] `main.OpenChat()`
+- [ ] `main.ChatList()`
+- [ ] 从文件加载初始化 `config.json` 使用的配置
+- [ ] `main.ChatList()` 增加修改时间
 
 ### 关于
 
