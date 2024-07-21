@@ -96,7 +96,7 @@ def NewChat():
     else:
         u.info(f'Start chat: {repr(chat_name)}')
         config.load()
-        chat = chat_init(repr(chat_name))
+        chat = chat_init(chat_name)
         chatting = chatting_init(
             api_base_url = config.cfg['api_base_url'],
             account_id = config.cfg['account_id'],
@@ -123,7 +123,7 @@ def NewChat():
                     case _: # default: add msg
                         all_msg += f'{msgn}\n'
             conversation += [{"role": "user", "content": all_msg},]
-            u.debug(f'all_msg: {all_msg}')
+            u.debug(f'all_msg: {repr(all_msg)}')
             u.info('Querying')
             output = chatting.run(conversation)
             u.debug(f'output: {output}')
