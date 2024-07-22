@@ -62,6 +62,7 @@ def Settings():
     '''
     设置界面
     '''
+    protect_configs = ['version', 'debug']
     u.warning('[Choose] Load configs? (y/...)')
     choose = getchar()
     u.debug(f'getChar choose: {repr(choose)}')
@@ -70,12 +71,26 @@ def Settings():
     u.info('Config now:')
     config.load()
     for name, value in config.cfg.items():
-        print(f"'{name}': '{value}'")
+        protect_config_flag = False
+        for n in protect_configs:
+            if name == n:
+                protect_config_flag = True
+        if protect_config_flag:
+            print(f"'{Fore.RED}{name}{Style.RESET_ALL}': '{value}'")
+        else:
+            print(f"'{Fore.GREEN}{name}{Style.RESET_ALL}': '{value}'")
+        
     while True:
         print('[Tip] r -> return')
         inp = input('[Input] edit: ')
         if inp == 'r' or inp == 'R':
             break
+        protect_config_flag = False
+        for i in protect_configs:
+            if inp == i:
+                protect_config_flag = True
+        if protect_config_flag:
+            u.error(f"Config {repr(inp)} is in protect list, can't edit.")
         else:
             u.info(f"Editing: {repr(inp)}")
             u.info(f"Value now: {repr(config.cget(inp))}")

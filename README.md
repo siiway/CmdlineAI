@@ -2,11 +2,19 @@
 
 一个简单的命令行 AI 客户端
 
+最新版本: `v1.0`
+
 ### 要求
 
 Python: `3.10`+
 
-Requirements: [Here](./requirements.txt)
+Requirements: <!--[Here](./requirements.txt)-->
+
+- `colorama`
+
+### 使用
+
+**请见** [文档](https://wyf9.top/#/CmdlineAI/README.md)
 
 ### 功能 / 支持
 
@@ -26,14 +34,13 @@ Requirements: [Here](./requirements.txt)
 
 ### TODO
 
-- [ ] `main.OpenChat()`
-- [ ] `main.ChatList()`
 - [ ] 从文件加载初始化 `config.json` 使用的配置
 - [ ] `main.ChatList()` 增加修改时间
+- [ ] **多语言**
 
 ### 关于
 
-本项目目前处于初创阶段，如果有建议/需求等, 可:
+本项目目前处于**初创阶段**，如果有建议/需求等, 可:
 
 1. 提个 Issue
 2. 联系作者: [Here](https://wyf9.top/#/?id=contact)
