@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 # coding: utf-8
 
+import os
+from colorama import Fore, Style
 from libs.getchar import getChar as getchar
 from utils import utils as utils_init
 u = utils_init()
@@ -37,17 +39,17 @@ s -> Settings
             u.debug(f'getChar: {repr(gchr)}')
             match gchr:
                 case 'q' | 'Q':
-                    u.info('Quit.')
+                    u.debug('Quit.')
                     exit(0)
                 case 's' | 'S':
-                    u.info('Selected: Settings')
+                    u.debug('Selected: Settings')
                     Settings()
                     break
                 case 'n' | 'N':
-                    u.info('Selected: NewChat')
+                    u.debug('Selected: NewChat')
                     NewChat()
                 case 'c' | 'C':
-                    u.info('Selected: ChatList')
+                    u.debug('Selected: ChatList')
                     ChatList()
                 case '\x03' | '\x1a':  # ^C / ^Z
                     u.warning('Received ^C/^Z, quitting.')
@@ -104,7 +106,27 @@ def ChatList():
     '''
     会话列表
     '''
-    pass
+    unformat_dir = u.read_dir('data/chat')
+    dirlst = u.remove_json(unformat_dir)
+    u.info('Chat list: ', noret = True)
+    for i in dirlst:
+        if i == dirlst[-1]:
+            print(f'{Fore.GREEN}{i}{Style.RESET_ALL}')
+        else:
+            print(f'{Fore.GREEN}{i}{Style.RESET_ALL}', end=f'{Fore.RED}, {Style.RESET_ALL}')
+    print('[Tip] r -> Return')
+    while True:
+        chat_name = input('[Input] Chat: ')
+        if chat_name == 'r' or chat_name == 'R':
+            break
+        chat_path = os.path.join('data/chat', chat_name + '.json')
+        if not os.path.exists(chat_path):
+            u.error(f'{chat_path} not exist.')
+        else:
+            u.info(f'Recover chat: {repr(chat_name)}')
+            conversation = u.load_json(chat_path)
+            OpenChat(chat_name, conversation)
+            break
 
 def OpenChat(chat_name, conversation):
     '''
