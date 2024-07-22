@@ -1,26 +1,53 @@
-#coding:utf-8
-# Configs
+# coding: utf-8
 
-# 是否显示调试信息
-DEBUG = False
+import json
+import os
+import utils as u
 
-# Account ID
-ACCOUNT_ID = ''
 
-# API Token
-API_TOKEN = ''
+def initJson():
+    try:
+        jsonData = {
+            'version': 1,
+            'debug': False,
+            'account_id': None,
+            'api_token': None,
+            'api_base_url': 'https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/',
+            'model': '@cf/qwen/qwen1.5-7b-chat-awq',
+            'prompt': '',
+            'prompt-when-input': '',
+        }
 
-# API Base URL, Default: f'https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/ai/run/'
-API_BASE_URL = f'https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/ai/run/'
+        with open('data/config.json', 'w+') as file:
+            json.dump(jsonData, file, indent=4, ensure_ascii=False)
+    except:
+        u.error('Create config.json failed')
+        raise
 
-# Model 运行使用的模型
-# MODEL = "@cf/meta/llama-2-7b-chat-int8"
-# MODEL = '@cf/qwen/qwen1.5-7b-chat-awq'
-MODEL = '@cf/qwen/qwen1.5-14b-chat-awq'
+# 检测是否存在
+if not (os.path.exists('data/config.json')):
+    u.warning('config.json not exist, creating')
+    initJson()
 
-# Prompt 模型提示词
-#PROMPT = "现在你是一个ai助手，立志于为用户解决编程方面的各种问题。\n注意：在用户未指定回答语言的情况下，请使用中文回答！！！"
-PROMPT = ''
-
-# Prompt will show when input 输入时的提示词
-PROMPT_WHEN_INPUT = ''
+class config:
+    def __init__(self):
+        with open('data/config.json', 'r') as file:
+            self.cfg = json.load(file)
+    def load(self):
+        with open('data/config.json', 'r') as file:
+            self.cfg = json.load(file)
+    def save(self):
+        with open('data/config.json', 'w+') as file:
+            json.dump(self.cfg, file, indent=4, ensure_ascii=False)
+    def cset(self, name, value):
+        self.cfg[name] = value
+        with open('data/config.json', 'w+') as file:
+            json.dump(self.cfg, file, indent=4, ensure_ascii=False)
+    def cget(self, name):
+        with open('data/config.json', 'r') as file:
+            self.cfg = json.load(file)
+            try:
+                gotcfg = self.cfg[name]
+            except:
+                gotcfg = None
+            return gotcfg
