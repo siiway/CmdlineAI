@@ -148,7 +148,6 @@ def OpenChat(chat_name, conversation):
     打开会话
     @param chat_name: 用于存储的会话名称
     @param conversation: 对话体
-    moving from NewChat()
     '''
     config.load()
     chat = chat_init(chat_name)

@@ -18,7 +18,7 @@ def initJson():
             'prompt-when-input': '',
         }
 
-        with open('data/config.json', 'w+') as file:
+        with open('data/config.json', 'w+', encoding='utf-8') as file:
             json.dump(jsonData, file, indent=4, ensure_ascii=False)
     except:
         u.error('Create config.json failed')
@@ -31,20 +31,20 @@ if not (os.path.exists('data/config.json')):
 
 class config:
     def __init__(self):
-        with open('data/config.json', 'r') as file:
+        with open('data/config.json', 'r', encoding='utf-8') as file:
             self.cfg = json.load(file)
     def load(self):
-        with open('data/config.json', 'r') as file:
+        with open('data/config.json', 'r', encoding='utf-8') as file:
             self.cfg = json.load(file)
     def save(self):
-        with open('data/config.json', 'w+') as file:
+        with open('data/config.json', 'w+', encoding='utf-8') as file:
             json.dump(self.cfg, file, indent=4, ensure_ascii=False)
     def cset(self, name, value):
         self.cfg[name] = value
-        with open('data/config.json', 'w+') as file:
+        with open('data/config.json', 'w+', encoding='utf-8') as file:
             json.dump(self.cfg, file, indent=4, ensure_ascii=False)
     def cget(self, name):
-        with open('data/config.json', 'r') as file:
+        with open('data/config.json', 'r', encoding='utf-8') as file:
             self.cfg = json.load(file)
             try:
                 gotcfg = self.cfg[name]

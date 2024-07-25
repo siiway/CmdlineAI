@@ -61,5 +61,5 @@ class utils:
         return lst_after
 
     def load_json(self, json_name):
-        with open(json_name, 'r') as file:
+        with open(json_name, 'r', encoding='utf-8') as file:
             return json.load(file)
