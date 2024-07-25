@@ -2,19 +2,15 @@
 
 一个简单的命令行 AI 客户端
 
-最新版本: `v1.0`
-
 ### 要求
 
 Python: `3.10`+
 
-Requirements: <!--[Here](./requirements.txt)-->
-
-- `colorama`
+Requirements: **[Here](./requirements.txt)**
 
 ### 使用
 
-**请见** [文档](https://wyf9.top/#/CmdlineAI/README.md)
+请见 [文档](https://wyf9.top/#/CmdlineAI/README.md)
 
 ### 功能 / 支持
 

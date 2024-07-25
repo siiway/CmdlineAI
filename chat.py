@@ -2,7 +2,8 @@
 
 import json
 import os
-import utils as u
+from utils import utils as utils_init
+u = utils_init()
 
 
 class chat:
@@ -10,9 +11,9 @@ class chat:
         self.name = name
 
     def load(self):
-        with open(f'data/chat/{self.name}.json', 'r', encoding='utf-8') as file:
+        with open(u.get_datapath(f'data/chat/{self.name}.json'), 'r', encoding='utf-8') as file:
             return json.load(file)
 
     def save(self, value):
-        with open(f'data/chat/{self.name}.json', 'w+', encoding='utf-8') as file:
+        with open(u.get_datapath(f'data/chat/{self.name}.json'), 'w+', encoding='utf-8') as file:
             json.dump(value, file, indent=4, ensure_ascii=False)
