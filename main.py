@@ -17,8 +17,9 @@ def Main():
     '''
     主程序
     '''
+
     u.info('''---
-Welcome to CmdlineAI v1!
+Welcome to CmdlineAI v1.1!
 Copyright (c)2024 wyf9. All rights reserved.
 ''')
 
@@ -121,7 +122,7 @@ def ChatList():
     '''
     会话列表
     '''
-    unformat_dir = u.read_dir('data/chat')
+    unformat_dir = u.read_dir(u.get_datapath('data/chat'))
     dirlst = u.remove_json(unformat_dir)
     u.info('Chat list: ', noret = True)
     for i in dirlst:
@@ -134,12 +135,29 @@ def ChatList():
         chat_name = input('[Input] Chat: ')
         if chat_name == 'r' or chat_name == 'R':
             break
-        chat_path = os.path.join('data/chat', chat_name + '.json')
+        chat_path = os.path.join(u.get_datapath('data/chat'), chat_name + '.json')
         if not os.path.exists(chat_path):
             u.error(f'{chat_path} not exist.')
         else:
             u.info(f'Recover chat: {repr(chat_name)}')
             conversation = u.load_json(chat_path)
+            # show history chat
+            # system: yellow
+            # assistant: blue
+            # user: green
+            # unknown: red
+            u.info('Chat details:')
+            for c in conversation:
+                match c["role"]:
+                    case 'system':
+                        print(f'{Fore.YELLOW}system -- {Style.RESET_ALL}: {c["content"]}')
+                    case 'assistant':
+                        print(f'{Fore.BLUE}assistant -> {Style.RESET_ALL}: {c["content"]}')
+                    case 'user':
+                        print(f'{Fore.GREEN}user <- {Style.RESET_ALL}: {c["content"]}')
+                    case _:
+                        print(f'{Fore.RED}{c["role"]} -> {Style.RESET_ALL}: {c["content"]}')
+
             OpenChat(chat_name, conversation)
             break
 
@@ -148,7 +166,6 @@ def OpenChat(chat_name, conversation):
     打开会话
     @param chat_name: 用于存储的会话名称
     @param conversation: 对话体
-    moving from NewChat()
     '''
     config.load()
     chat = chat_init(chat_name)
@@ -163,7 +180,7 @@ def OpenChat(chat_name, conversation):
 - /q -> Quit the chat''')
     while True:
         all_msg = ''
-        print('[Input]')
+        print(f'{Fore.GREEN}[Input]{Style.RESET_ALL}')
         while True:
             msgn = input(config.cfg['prompt-when-input'])
             match msgn:
@@ -180,7 +197,7 @@ def OpenChat(chat_name, conversation):
         output = chatting.run(conversation)
         u.debug(f'output: {output}')
         if output['success']:
-            print(f'''[Response]
+            print(f'''{Fore.BLUE}[Response]{Style.RESET_ALL}
 -```
 {output['result']['response']}
 ```-''')

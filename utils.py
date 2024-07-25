@@ -1,10 +1,25 @@
 import json
 import os
+import sys
 from colorama import Fore, Style
 
 
 class utils:
     env_debug = False
+
+    def get_basepath(self):
+        '''
+        获取 base path (main.py 所在目录)
+        '''
+        main_py = sys.argv[0]
+        return os.path.dirname(main_py)
+
+    def get_datapath(self, path):
+        '''
+        将相对路径的数据目录改为绝对路径
+        @param path: 相对路径
+        '''
+        return os.path.join(self.get_basepath(), path)
 
     def info(self, msg, noret=False):
         if noret:
@@ -61,5 +76,5 @@ class utils:
         return lst_after
 
     def load_json(self, json_name):
-        with open(json_name, 'r') as file:
+        with open(json_name, 'r', encoding='utf-8') as file:
             return json.load(file)
