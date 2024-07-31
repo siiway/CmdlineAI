@@ -1,0 +1,19 @@
+{
+    "version": 1, // 版本号，无需更改
+    "debug": false, // 控制是否显示 debug 信息
+    "account_id": null, // Cloudflare 账户 id
+    /*
+    例如:
+    https: //dash.cloudflare.com/exampleid/domain.example/dns/records
+    其中 exampleid 就是你的账户 id (很长)
+    */
+    "api_token": null, // Cloudflare API Token
+    /*
+    可到 https://dash.cloudflare.com/profile/api-tokens 生成
+    至少需要权限: Workers AI:编辑, Workers AI:读取
+    */
+    "api_base_url": "https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/", // Cloudflare Workers AI Base, 可自行反代或保持默认
+    "model": "@cf/qwen/qwen1.5-7b-chat-awq", // 要使用的模型, 可到 https://dash.cloudflare.com/?to=/:account/ai/workers-ai/models 查看模型列表
+    "prompt": "", // 模型的初始提示词
+    "prompt-when-input": "" // 在输入(对话中)时出现的提示符，默认为空
+}
