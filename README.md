@@ -30,8 +30,9 @@ Requirements: **[Here](./requirements.txt)**
 
 ### TODO
 
-- [ ] 从文件加载初始化 `config.json` 使用的配置
-- [ ] `main.ChatList()` 增加修改时间
+- [x] 从文件加载初始化 `config.json` 使用的配置
+~~- [ ] `main.ChatList()` 增加修改时间~~
+- [ ] 对话支持从输入内容获取名称
 - [ ] **多语言**
 
 ### 关于
