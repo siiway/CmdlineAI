@@ -156,7 +156,7 @@ def ChatList():
                     case 'user':
                         print(f'{Fore.GREEN}user <- {Style.RESET_ALL}: {c["content"]}')
                     case _:
-                        print(f'{Fore.RED}{c["role"]} -> {Style.RESET_ALL}: {c["content"]}')
+                        print(f'{Fore.RED}{c["role"]} -- {Style.RESET_ALL}: {c["content"]}')
 
             OpenChat(chat_name, conversation)
             break

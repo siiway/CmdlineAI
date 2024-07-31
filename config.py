@@ -4,21 +4,21 @@ import json
 import os
 from utils import utils as utils_init
 u = utils_init()
+from libs.jsonc_parser.parser import JsoncParser as jsonp
 
 
+# def initJson():
+    # try:
+        # jsonData = 
+
+        # with open(u.get_datapath('data/config.json'), 'w+', encoding='utf-8') as file:
+            # json.dump(jsonData, file, indent=4, ensure_ascii=False)
+    # except:
+        # u.error('Create config.json failed')
+        # raise
 def initJson():
     try:
-        jsonData = {
-            'version': 1,
-            'debug': False,
-            'account_id': None,
-            'api_token': None,
-            'api_base_url': 'https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/',
-            'model': '@cf/qwen/qwen1.5-7b-chat-awq',
-            'prompt': '',
-            'prompt-when-input': '',
-        }
-
+        jsonData = jsonp.parse_file(u.get_datapath('example.jsonc'), encoding='utf-8')
         with open(u.get_datapath('data/config.json'), 'w+', encoding='utf-8') as file:
             json.dump(jsonData, file, indent=4, ensure_ascii=False)
     except:
