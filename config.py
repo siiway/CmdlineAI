@@ -25,14 +25,11 @@ def initJson():
         u.error('Create config.json failed')
         raise
 
-
-# 检测是否存在
-if not (os.path.exists(u.get_datapath('data/config.json'))):
-    u.warning('config.json not exist, creating')
-    initJson()
-
 class config:
     def __init__(self):
+        if not (os.path.exists(u.get_datapath('data/config.json'))):
+            u.warning('config.json not exist, creating')
+            initJson()
         with open(u.get_datapath('data/config.json'), 'r', encoding='utf-8') as file:
             self.cfg = json.load(file)
     def load(self):

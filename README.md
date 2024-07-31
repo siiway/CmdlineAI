@@ -2,6 +2,8 @@
 
 一个简单的命令行 AI 客户端
 
+A simple command-line AI client.
+
 ### 要求
 
 Python: `3.10`+
@@ -10,7 +12,7 @@ Requirements: **[Here](./requirements.txt)**
 
 ### 使用
 
-请见 [文档](https://wyf9.top/#/CmdlineAI/README.md) -> 仍然没写
+~~请见 [文档](https://wyf9.top/#/CmdlineAI/README.md)~~ -> 仍然没写
 
 ### 功能 / 支持
 
@@ -31,7 +33,7 @@ Requirements: **[Here](./requirements.txt)**
 ### TODO
 
 - [x] 从文件加载初始化 `config.json` 使用的配置
-~~- [ ] `main.ChatList()` 增加修改时间~~
+- [ ] `main.ChatList()` 增加修改时间
 - [ ] 对话支持从输入内容获取名称
 - [ ] **多语言**
 
