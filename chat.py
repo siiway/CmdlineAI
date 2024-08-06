@@ -105,6 +105,7 @@ class chatlist:
                 if self.file['id_list'][i]['id'] == id:
                     content = {
                         'id': id,
+                        'name': self.file['id_list'][i]['name'],
                         'modtime': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                     }
                     self.file['id_list'][i] = content

@@ -78,3 +78,14 @@ class utils:
     def load_json(self, json_name):
         with open(json_name, 'r', encoding='utf-8') as file:
             return json.load(file)
+
+    backlinestr = '\033[F\033[K' # 退行
+
+    def backline(self, num = 1):
+        '''
+        退行
+        @param num: 行数
+        '''
+        for i in range(num + 1):
+            print(self.backlinestr, end = '')
+        # print()

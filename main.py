@@ -112,6 +112,7 @@ def NewChat():
     '''
     创建新会话
     '''
+    config.load()
     print('[Tip] c -> cancel')
     chat_name = input('[Input] Chat name: ')
     if chat_name == 'c' or chat_name == 'C':
@@ -245,20 +246,29 @@ def OpenChat(chat_id, conversation):
     )
     print('''[Tip]
 - /s -> Send
+- /b -> Backline
 - /q -> Quit the chat''')
     while True:
-        all_msg = ''
+        all_msgs = []
         print(f'{Fore.GREEN}[Input]{Style.RESET_ALL}')
         while True:
             msgn = input(config.cfg['prompt-when-input'])
             match msgn:
                 case '/s':  # send
                     break
+                case '/b':  # backline
+                    try:
+                        all_msgs.pop()
+                        u.backline(1)
+                        # print(config.cfg['prompt-when-input'] + all_msgs[-1])
+                    except IndexError:
+                        u.warning('Maybe pop from empty list, ignore.')
                 case '/q':  # quit
                     u.info('Quitting chat')
                     return 0
                 case _:  # default: add msg
-                    all_msg += f'{msgn}\n'
+                    all_msgs += [f'{msgn}\n']
+        all_msg = ''.join(all_msgs)
         conversation += [{"role": "user", "content": all_msg},]
         u.debug(f'all_msg: {repr(all_msg)}')
         u.info('Querying')
