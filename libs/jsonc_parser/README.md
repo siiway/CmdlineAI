@@ -1,6 +1,7 @@
-本文件夹中的内容来自 [kobayashi-deepinsight/jsonc-parser](https://github.com/kobayashi-deepinsight/jsonc-parser)
+Source From [kobayashi-deepinsight/jsonc-parser](https://github.com/kobayashi-deepinsight/jsonc-parser)
 
 > 以下为原文件内容
+> Original content below:
 
 # jsonc-parser
 
