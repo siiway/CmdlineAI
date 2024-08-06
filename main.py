@@ -198,6 +198,7 @@ def ChatList():
                     gc = getchar()
                     if gc == 'y' or gc == 'Y':
                         chatlist.remove(chat_id)
+                        os.remove(chat_path)
                         u.info(f'Removed #{chat_id}')
                     else:
                         u.info('Cancel.')
