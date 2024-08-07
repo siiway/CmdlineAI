@@ -25,7 +25,7 @@ def Main():
     yearnow = datetime.now().year
     u.infos(
         'Welcome to CmdlineAI v1.1!',
-        f'Copyright (c){yearnow} wyf9. All rights reserved.',)
+        f'Copyright (c){yearnow} wyf9. All rights reserved.')
 
     u.env_debug = config.cget('debug')
     u.debug('Debug ON')
@@ -261,7 +261,7 @@ def OpenChat(chat_id, conversation):
              '- /q -> Quit the chat')
     while True:
         all_msgs = []
-        firstInput = True
+        firstInput = True  # 是否是本次第一行输入
         print(f'{Fore.GREEN}[Input]{Style.RESET_ALL}')
         while True:
             msgn = input(config.cfg['prompt-when-input'])
@@ -274,13 +274,13 @@ def OpenChat(chat_id, conversation):
                         u.backline(1)
                         # print(config.cfg['prompt-when-input'] + all_msgs[-1])
                     except IndexError:
-                        u.warning('Maybe pop from empty list, ignore.')
+                        # u.warning('Maybe pop from empty list, ignore.')
+                        pass
                 case '/q':  # quit
                     u.info('Quitting chat')
                     return 0
                 case _:  # default: add msg
                     if firstInput:
-                        u.debug('firstInput')
                         firstInput = False
                         all_msgs += [msgn]
                     else:
