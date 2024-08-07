@@ -251,6 +251,7 @@ def OpenChat(chat_id, conversation):
 - /q -> Quit the chat''')
     while True:
         all_msgs = []
+        inputnums = 0
         print(f'{Fore.GREEN}[Input]{Style.RESET_ALL}')
         while True:
             msgn = input(config.cfg['prompt-when-input'])
@@ -268,7 +269,11 @@ def OpenChat(chat_id, conversation):
                     u.info('Quitting chat')
                     return 0
                 case _:  # default: add msg
-                    all_msgs += [f'{msgn}\n']
+                    inputnums += 1
+                    if inputnums == 1:
+                        all_msgs += [msgn]
+                    else:
+                        all_msgs += ['\n' + msgn]
         all_msg = ''.join(all_msgs)
         conversation += [{"role": "user", "content": all_msg},]
         u.debug(f'all_msg: {repr(all_msg)}')
