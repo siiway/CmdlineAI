@@ -6,6 +6,7 @@ from chat import chat as chat_init
 from chat import chatlist as chatlist_init
 from config import config as config_init
 import os
+from datetime import datetime
 from colorama import Fore, Style
 from libs.getchar import getChar as getchar
 from utils import utils as utils_init
@@ -21,22 +22,21 @@ def Main():
     主程序
     '''
 
-    u.info('''---
-Welcome to CmdlineAI v1.1!
-Copyright (c)2024 wyf9. All rights reserved.
-''')
+    yearnow = datetime.now().year
+    u.infos(
+        'Welcome to CmdlineAI v1.1!',
+        f'Copyright (c){yearnow} wyf9. All rights reserved.')
 
     u.env_debug = config.cget('debug')
     u.debug('Debug ON')
 
     while True:
-        u.info('''---
-[Select]
-n -> New chat
-c -> Chat list
-q -> Quit
-s -> Settings
-''')
+        u.infos(
+            '[Select]',
+            'n -> New chat',
+            'c -> Chat list',
+            'q -> Quit',
+            's -> Settings')
 
         while True:
             gchr = getchar()
@@ -124,8 +124,8 @@ def NewChat():
             conversation = []
         else:
             conversation = [  # init chat list
-            {"role": "system", "content": config.cfg['prompt']},
-        ]
+                {"role": "system", "content": config.cfg['prompt']},
+            ]
         OpenChat(chat_id, conversation)
 
 
@@ -140,7 +140,8 @@ def ChatList():
         try:
             # (yellow)#1 (blue)[2024-08-03 21:06:00] (green)niganma
             # print(f'{Fore.GREEN}{n["id"]}{Style.RESET_ALL}')
-            print(f"#{Fore.YELLOW}{n['id']}{Style.RESET_ALL} {Fore.BLUE}[{n['modtime']}]{Style.RESET_ALL} {Fore.GREEN}{n['name']}{Style.RESET_ALL}")
+            print(
+                f"#{Fore.YELLOW}{n['id']}{Style.RESET_ALL} {Fore.BLUE}[{n['modtime']}]{Style.RESET_ALL} {Fore.GREEN}{n['name']}{Style.RESET_ALL}")
             lstnum += 1
         except KeyError:
             pass
@@ -189,15 +190,22 @@ def ChatList():
                 continue
             else:
                 u.info(f'Recover chat #{chat_id}')
-                chat_path = os.path.join(u.get_datapath('data/chat'), raw_chat_id + '.json')
+                chat_path = os.path.join(u.get_datapath(
+                    'data/chat'), raw_chat_id + '.json')
                 try:
                     conversation = u.load_json(chat_path)
-                except:
+                except FileNotFoundError:
                     u.error(f'Chat #{chat_id} file `{chat_path}` not exist.')
                     u.warning('Remove this chat in chatlist.json? (y/...)')
                     gc = getchar()
                     if gc == 'y' or gc == 'Y':
-                        chatlist.remove(chat_id)
+                        u.debug('remove in chatlist: ', noret=True)
+                        u.debug(chatlist.remove(chat_id))
+                        try:
+                            os.remove(chat_path)
+                            u.debug('remove json file: SUCCESS')
+                        except FileNotFoundError:
+                            u.debug('remove json file: NOT FOUND')
                         u.info(f'Removed #{chat_id}')
                     else:
                         u.info('Cancel.')
@@ -208,9 +216,12 @@ def ChatList():
                 # user: green
                 # unknown: red
                 u.info('Chat details:')
-                print(f'{Fore.BLUE}id{Style.RESET_ALL}: {Fore.GREEN}{chatobj["id"]}{Style.RESET_ALL}')
-                print(f'{Fore.BLUE}Name{Style.RESET_ALL}: {Fore.GREEN}{chatobj["name"]}{Style.RESET_ALL}')
-                print(f'{Fore.BLUE}Last update{Style.RESET_ALL}: {Fore.GREEN}{chatobj["modtime"]}{Style.RESET_ALL}')
+                print(
+                    f'{Fore.BLUE}id{Style.RESET_ALL}: {Fore.GREEN}{chatobj["id"]}{Style.RESET_ALL}')
+                print(
+                    f'{Fore.BLUE}Name{Style.RESET_ALL}: {Fore.GREEN}{chatobj["name"]}{Style.RESET_ALL}')
+                print(
+                    f'{Fore.BLUE}Last update{Style.RESET_ALL}: {Fore.GREEN}{chatobj["modtime"]}{Style.RESET_ALL}')
                 for c in conversation:
                     match c["role"]:
                         case 'system':
@@ -244,12 +255,13 @@ def OpenChat(chat_id, conversation):
         api_token=config.cfg['api_token'],
         model=config.cfg['model'],
     )
-    print('''[Tip]
-- /s -> Send
-- /b -> Backline
-- /q -> Quit the chat''')
+    u.prints('[Tip]',
+             '- /s -> Send',
+             '- /b -> Backline',
+             '- /q -> Quit the chat')
     while True:
         all_msgs = []
+        firstInput = True  # 是否是本次第一行输入
         print(f'{Fore.GREEN}[Input]{Style.RESET_ALL}')
         while True:
             msgn = input(config.cfg['prompt-when-input'])
@@ -262,12 +274,17 @@ def OpenChat(chat_id, conversation):
                         u.backline(1)
                         # print(config.cfg['prompt-when-input'] + all_msgs[-1])
                     except IndexError:
-                        u.warning('Maybe pop from empty list, ignore.')
+                        # u.warning('Maybe pop from empty list, ignore.')
+                        pass
                 case '/q':  # quit
                     u.info('Quitting chat')
                     return 0
                 case _:  # default: add msg
-                    all_msgs += [f'{msgn}\n']
+                    if firstInput:
+                        firstInput = False
+                        all_msgs += [msgn]
+                    else:
+                        all_msgs += ['\n' + msgn]
         all_msg = ''.join(all_msgs)
         conversation += [{"role": "user", "content": all_msg},]
         u.debug(f'all_msg: {repr(all_msg)}')
@@ -275,16 +292,16 @@ def OpenChat(chat_id, conversation):
         output = chatting.run(conversation)
         u.debug(f'output: {output}')
         if output['success']:
-            print(f'''{Fore.BLUE}[Response]{Style.RESET_ALL}
-{output['result']['response']}''')
+            u.prints(f'{Fore.BLUE}[Response]{Style.RESET_ALL}',
+                     f'{output["result"]["response"]}')
             conversation += [{"role": "assistant",
                               "content": output['result']['response']}]
             chat.save(conversation)
             chatlist.update(chat_id)
         else:
-            u.error(f'''Error!
-All Response:
-{u.format_dict(output)}''')
+            u.error('Error!',
+                    'All Response:',
+                    f'{u.format_dict(output)}')
             conversation.pop()  # its a list!!!
             u.debug('Pop last user input')
             continue

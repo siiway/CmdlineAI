@@ -13,15 +13,16 @@ u = utils_init()
 class chat:
     '''
     单个对话存储
-    @param id: 对话标识 id
     '''
 
     def __init__(self, id):
+        '''
+        @param id: 对话标识 id
+        '''
         self.id = id
 
     def load(self):
-        with open(u.get_datapath(f'data/chat/{self.id}.json'), 'r', encoding='utf-8') as file:
-            return json.load(file)
+            return u.load_json(u.get_datapath(f'data/chat/{self.id}.json'))
 
     def save(self, value):
         with open(u.get_datapath(f'data/chat/{self.id}.json'), 'w+', encoding='utf-8') as file:
@@ -35,7 +36,7 @@ def initChatList():
         with open(u.get_datapath('data/chatlist.json'), 'w+', encoding='utf-8') as file:
             json.dump(jsonData, file, indent=4, ensure_ascii=False)
     except:
-        u.error('Create config.json failed')
+        u.error('Create chatlist.json failed')
         raise
 
 
@@ -51,8 +52,7 @@ class chatlist:
         self.load()
 
     def load(self):
-        with open(u.get_datapath('data/chatlist.json'), 'r', encoding='utf-8') as file:
-            self.file = json.load(file)
+        self.file = u.load_json(u.get_datapath('data/chatlist.json'))
 
     def save(self):
         with open(u.get_datapath('data/chatlist.json'), 'w+', encoding='utf-8') as file:
@@ -103,12 +103,7 @@ class chatlist:
         try:
             for i in range(self.file['last_id']):
                 if self.file['id_list'][i]['id'] == id:
-                    content = {
-                        'id': id,
-                        'name': self.file['id_list'][i]['name'],
-                        'modtime': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                    }
-                    self.file['id_list'][i] = content
+                    self.file['id_list'][i]['modtime'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                     self.save()
                     return True
         except:
