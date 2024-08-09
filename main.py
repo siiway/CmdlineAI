@@ -138,6 +138,7 @@ def ChatList():
     lstnum = 0
     for n in lst:
         try:
+            # #1 [2024-08-03 21:06:00] niganma
             # (yellow)#1 (blue)[2024-08-03 21:06:00] (green)niganma
             # print(f'{Fore.GREEN}{n["id"]}{Style.RESET_ALL}')
             print(
@@ -196,20 +197,48 @@ def ChatList():
                     conversation = u.load_json(chat_path)
                 except FileNotFoundError:
                     u.error(f'Chat #{chat_id} file `{chat_path}` not exist.')
-                    u.warning('Remove this chat in chatlist.json? (y/...)')
+                    u.warning('Remove this chat in chatlist.json, or create it? (y/c/...)')
                     gc = getchar()
-                    if gc == 'y' or gc == 'Y':
-                        u.debug('remove in chatlist: ', noret=True)
-                        u.debug(chatlist.remove(chat_id))
-                        try:
-                            os.remove(chat_path)
-                            u.debug('remove json file: SUCCESS')
-                        except FileNotFoundError:
-                            u.debug('remove json file: NOT FOUND')
-                        u.info(f'Removed #{chat_id}')
-                    else:
-                        u.info('Cancel.')
-                    continue
+                    match gc:
+                        case 'y':
+                            chatlist.remove(chat_id)
+                            u.info(f'Removed #{chat_id}')
+                        case 'Y':
+                            chatlist.remove(chat_id)
+                            u.info(f'Removed #{chat_id}')
+                        case 'c':
+                            try:
+                                chat_id = int(chat_id)
+                            except:
+                                u.error('Invaild chat id. cancel.')
+                                continue
+                            will_create = chatlist.get(chat_id)
+                            chat_name = will_create['name']
+                            u.info(f'Create chat: #{chat_id} / `{chat_name}`')
+                            if config.cfg['prompt'] == '':
+                                conversation = []
+                            else:
+                                conversation = [  # init chat list
+                                    {"role": "system", "content": config.cfg['prompt']},
+                                ]
+                            OpenChat(chat_id, conversation)
+                        case 'C':
+                            pass
+                        case _:
+                            u.info('Cancel.')
+                            continue
+                    # if gc == 'y' or gc == 'Y':
+                    #     u.debug('remove in chatlist: ', noret=True)
+                    #     u.debug(chatlist.remove(chat_id))
+                    #     try:
+                    #         os.remove(chat_path)
+                    #         u.debug('remove json file: SUCCESS')
+                    #     except FileNotFoundError:
+                    #         u.debug('remove json file: NOT FOUND')
+                    #     u.info(f'Removed #{chat_id}')
+                    # else:
+                    #     u.info('Cancel.')
+                    # continue
                 # show history chat
                 # system: yellow
                 # assistant: blue
