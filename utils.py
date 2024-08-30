@@ -12,6 +12,8 @@ class utils:
     def get_basepath(self):
         '''
         获取 base path (main.py 所在目录)
+
+        :return str: 目录
         '''
         main_py = sys.argv[0]
         return os.path.dirname(main_py)
@@ -20,6 +22,8 @@ class utils:
         '''
         将相对路径的数据目录改为绝对路径
         @param path: 相对路径
+
+        :return str: 处理后的路径
         '''
         return os.path.join(self.get_basepath(), path)
 
@@ -32,7 +36,8 @@ class utils:
     error 错误
     debug 调试 -> Only show when `env_debug == True`
 
-    @param noret: 是否在输出最后取消换行
+    :param msg: 输出消息
+    :param noret: 是否在输出最后取消换行
 
     +s -> 多行输出 (每行为一参数)
     '''
@@ -113,14 +118,16 @@ class utils:
     def format_dict(self, dic):
         '''
         列表 -> 格式化 json
-        @param dic: 列表
+
+        :param dic: 列表
         '''
         return json.dumps(dic, indent=4, ensure_ascii=False, sort_keys=False, separators=(', ', ': '))
 
     def remove_json(self, lst):
         '''
         移除列表中每项末尾的 `.json`
-        @param lst: 列表
+        
+        :param lst: 列表
         '''
         lst_after = []
         for i in lst:
@@ -133,18 +140,25 @@ class utils:
     def load_json(self, json_name):
         '''
         加载 json 文件
+
+        :param json_name: 文件名
+        :return: 列表或字典
         '''
         try:
             with open(json_name, 'r', encoding='utf-8') as file:
                 return json.load(file)
         except json.decoder.JSONDecodeError as err:
-            self.error(f'Load json file `{json_name}` Error! Please check the json format!')
+            self.error(f'Load json file `{
+                       json_name}` Error! Please check the json format!')
             raise
 
     def read_dir(self, dirpath):
         '''
         遍历文件夹
-        @param dirpath: 文件夹路径
+        貌似没有引用?
+
+        :param dirpath: 文件夹路径
+        :return: 遍历文件夹中的列表
         '''
         if not os.path.exists(dirpath):
             raise NotADirectoryError(f'{dirpath} not exist.')
@@ -161,7 +175,8 @@ class utils:
     def backline(self, num=1):
         '''
         退行
-        @param num: 行数
+        
+        :param num: 行数
         '''
         for i in range(num + 1):
             print(self.backlinestr, end='')

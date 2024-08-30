@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#python3
 # coding: utf-8
 
 from chatting import chatting as chatting_init
@@ -141,8 +141,8 @@ def ChatList():
             # #1 [2024-08-03 21:06:00] niganma
             # (yellow)#1 (blue)[2024-08-03 21:06:00] (green)niganma
             # print(f'{Fore.GREEN}{n["id"]}{Style.RESET_ALL}')
-            print(
-                f"#{Fore.YELLOW}{n['id']}{Style.RESET_ALL} {Fore.BLUE}[{n['modtime']}]{Style.RESET_ALL} {Fore.GREEN}{n['name']}{Style.RESET_ALL}")
+            print(f"#{Fore.YELLOW}{n['id']}{Style.RESET_ALL} {Fore.BLUE}[{n['modtime']}]{
+                  Style.RESET_ALL} {Fore.GREEN}{n['name']}{Style.RESET_ALL}")
             lstnum += 1
         except KeyError:
             pass
@@ -197,7 +197,8 @@ def ChatList():
                     conversation = u.load_json(chat_path)
                 except FileNotFoundError:
                     u.error(f'Chat #{chat_id} file `{chat_path}` not exist.')
-                    u.warning('Remove this chat in chatlist.json, or create it? (y/c/...)')
+                    u.warning(
+                        'Remove this chat in chatlist.json, or create it? (y/c/...)')
                     gc = getchar()
                     match gc:
                         case 'y':
@@ -219,7 +220,8 @@ def ChatList():
                                 conversation = []
                             else:
                                 conversation = [  # init chat list
-                                    {"role": "system", "content": config.cfg['prompt']},
+                                    {"role": "system",
+                                        "content": config.cfg['prompt']},
                                 ]
                             OpenChat(chat_id, conversation)
                         case 'C':

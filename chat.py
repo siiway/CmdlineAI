@@ -17,12 +17,12 @@ class chat:
 
     def __init__(self, id):
         '''
-        @param id: 对话标识 id
+        :param id: 对话标识 id
         '''
         self.id = id
 
     def load(self):
-            return u.load_json(u.get_datapath(f'data/chat/{self.id}.json'))
+        return u.load_json(u.get_datapath(f'data/chat/{self.id}.json'))
 
     def save(self, value):
         with open(u.get_datapath(f'data/chat/{self.id}.json'), 'w+', encoding='utf-8') as file:
@@ -61,8 +61,9 @@ class chatlist:
     def new(self, name):
         '''
         新增一项
-        @param name: 对话名称
-        @return: int, 存入对话的 `id`
+
+        :param name: 对话名称
+        :return int: 存入对话的 `id`
         '''
         name = str(name)
         id = self.file['last_id'] + 1
@@ -79,7 +80,9 @@ class chatlist:
     def get(self, id):
         '''
         获取指定 `id` 的一项
-        @param id: ↑ 已经解释了
+
+        :param id: ↑ 已经解释了
+        :return obj: 获取到的项, 或 None
         '''
         self.load()
         try:
@@ -96,14 +99,16 @@ class chatlist:
     def update(self, id):
         '''
         更改指定 `id` 的一项 (~~其实就是更新修改时间~~)
-        @param id: ↑ 已经解释了
-        @return: bool, 是否成功
+
+        :param id: ↑ 已经解释了
+        :return bool: 是否成功
         '''
         self.load()
         try:
             for i in range(self.file['last_id']):
                 if self.file['id_list'][i]['id'] == id:
-                    self.file['id_list'][i]['modtime'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                    self.file['id_list'][i]['modtime'] = time.strftime(
+                        "%Y-%m-%d %H:%M:%S", time.localtime())
                     self.save()
                     return True
         except:
@@ -113,8 +118,9 @@ class chatlist:
     def remove(self, id):
         '''
         删除一项
-        @param id: 删除目标字典中的 `id` -> int
-        @return: 是否成功找到该项
+
+        :param id: 删除目标字典中的 `id` -> int
+        :return bool: 是否成功找到该项
         '''
         self.load()
         # for o in self.file['id_list']:
@@ -138,12 +144,13 @@ class chatlist:
 
     def reset(self):
         '''
-        重置所有
+        重置
         - 重新生成 `data/chatlist.json`
         - 清空 `data/chat`
         '''
         print(f'{Fore.RED}WARNING{Style.RESET_ALL}: This will do:')
-        print(f'- {Fore.RED}Reinit{Style.RESET_ALL} `{u.get_datapath("data/chatlist.json")}`')
+        print(
+            f'- {Fore.RED}Reinit{Style.RESET_ALL} `{u.get_datapath("data/chatlist.json")}`')
         print(f'- {Fore.RED}Clear{Style.RESET_ALL} `{u.get_datapath("data/chat")}`')
         print(f'{Fore.RED}Continue?{Style.RESET_ALL} (y/...) ')
         ok = getchar()
