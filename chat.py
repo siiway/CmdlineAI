@@ -104,15 +104,34 @@ class chatlist:
         :return bool: 是否成功
         '''
         self.load()
-        try:
-            for i in range(self.file['last_id']):
+        for i in range(self.file['last_id']):
+            try:
                 if self.file['id_list'][i]['id'] == id:
                     self.file['id_list'][i]['modtime'] = time.strftime(
                         "%Y-%m-%d %H:%M:%S", time.localtime())
                     self.save()
                     return True
-        except:
-            pass
+            except:
+                pass
+        return False
+
+    def rename(self, id, renameto):
+        '''
+        重命名指定 `id` 的一项
+
+        :param id: ↑ 已经解释了
+        :param renameto: 重命名到的名称
+        :return bool: 是否成功
+        '''
+        self.load()
+        for i in range(self.file['last_id']):
+            try:
+                if self.file['id_list'][i]['id'] == id:
+                    self.file['id_list'][i]['name'] = renameto
+                    self.save()
+                    return True
+            except:
+                pass
         return False
 
     def remove(self, id):

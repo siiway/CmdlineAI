@@ -1,4 +1,4 @@
-#python3
+# python3
 # coding: utf-8
 
 from chatting import chatting as chatting_init
@@ -150,13 +150,15 @@ def ChatList():
         u.info('None.')
         return 0
 
-    print('[Tip] r -> Return')
-    print('[Tip] d [id] -> delete')
+    u.prints('[Tip] r -> Return',
+             '[Tip] n [id] -> Rename',
+             '[Tip] d [id] -> delete')
+
     while True:
         raw_chat_id = str(input('[Input] Chat: '))
         if raw_chat_id == 'r' or raw_chat_id == 'R':
             break
-        if (raw_chat_id.split(' ', 1)[0] == 'd') and (len(raw_chat_id.split(" ", 1)) > 1):
+        if (raw_chat_id.split(' ', 1)[0] == 'd' or raw_chat_id.split(' ', 1)[0] == 'D') and (len(raw_chat_id.split(" ")) > 1):
             u.debug('trydel: yes')
             try:
                 real_chat_id = int(raw_chat_id.split(" ", 1)[1])
@@ -171,8 +173,27 @@ def ChatList():
             else:
                 u.info('Cancel.')
                 continue
+        elif (raw_chat_id.split(' ', 1)[0] == 'n' or raw_chat_id.split(' ', 1)[0] == 'N') and (len(raw_chat_id.split(" ")) > 1):
+            u.debug('tryrename: yes')
+            try:
+                real_chat_id = int(raw_chat_id.split(" ", 1)[1])
+            except:
+                u.error('Invaild input.')
+                continue
+            print('[Tip] c -> Cancel')
+            inp = input(f'[Input] Rename chat {Fore.GREEN}#{
+                        real_chat_id}{Style.RESET_ALL} to: ')
+            if inp == 'c' or inp == 'C':
+                u.info('Cancel.')
+                continue
+            else:
+                try:
+                    chatlist.rename(real_chat_id, inp)
+                    u.info(f'Renamed {Fore.GREEN}#{real_chat_id}{Style.RESET_ALL} to "{Fore.GREEN}{inp}{Style.RESET_ALL}".')
+                except:
+                    u.error(f'Rename {Fore.GREEN}#{real_chat_id}{Style.RESET_ALL} failed.')
         else:
-            u.debug('trydel: no')
+            u.debug('trydel/rename: no')
             try:
                 chat_id = int(raw_chat_id)
             except:
