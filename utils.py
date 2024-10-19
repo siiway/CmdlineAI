@@ -148,8 +148,7 @@ class utils:
             with open(json_name, 'r', encoding='utf-8') as file:
                 return json.load(file)
         except json.decoder.JSONDecodeError as err:
-            self.error(f'Load json file `{
-                       json_name}` Error! Please check the json format!')
+            self.error(f'Load json file `{json_name}` Error: {err} ! Please check the json format!')
             raise
 
     def read_dir(self, dirpath):
